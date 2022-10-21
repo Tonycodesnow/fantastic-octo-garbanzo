@@ -8,15 +8,24 @@ var taskFormHandler = function (event) {
   var taskNameInput = document.querySelector("input[name='task-name']").value;
   var taskTypeInput = document.querySelector("select[name='task-type']").value;
 
+  // "if either one or both of the variables are not true, then proceed," which is the same as "if either one or both of the variables are false, then proceed."
+  if (!taskNameInput || !taskTypeInput) {
+    alert("You need to fill out the task form!");
+    return false;
+  }
+  
+  formEl.reset();
+  
   // Package up data as an object
   var taskDataObj = {
     name: taskNameInput,
     type: taskTypeInput
   };
-
+  
   // send it as an argument to createTaskEl
   createTaskEl(taskDataObj);
   console.table({taskTypeInput, taskNameInput});
+  
 };
 
 var createTaskEl = function(taskDataObj) {
