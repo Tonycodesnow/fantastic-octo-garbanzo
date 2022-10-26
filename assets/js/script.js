@@ -2,9 +2,32 @@ var taskIdCounter = 0;
 
 var formEl = document.querySelector("#task-form");
 var tasksToDoEl = document.querySelector("#tasks-2-slay");
-var taskInProgressEl = document.querySelector("#slaying-in-progress");
+var tasksInProgressEl = document.querySelector("#slaying-in-progress");
 var tasksCompletedEl = document.querySelector("#tasks-Slayed");
 var pageContentEl = document.querySelector("#page-content");
+
+var taskStatusChangeHandler = function (event) {
+  // console.log(event.target, event.target.getAttribute("data-task-id"))
+  //get the task item's id
+  var taskId = event.target.getAttribute("data-task-id");
+
+  // get the currently selected option's value and convert to lowercase
+  var statusValue = event.target.value.toLowerCase();
+
+  // find the parent task item element based on the id
+  var taskSelected = document.querySelector(
+    ".task-item[data-task-id='" + taskId + "']"
+  );
+
+  if (statusValue === "about 2 slay") {
+    tasksToDoEl.appendChild(taskSelected);
+  } else if (statusValue === "slaying in progress") {
+    tasksInProgressEl.appendChild(taskSelected);
+  } else if (statusValue === "slayed") {
+    tasksCompletedEl.appendChild(taskSelected);
+  }
+
+};
 
 var taskFormHandler = function (event) {
   event.preventDefault();
@@ -43,7 +66,6 @@ var createTaskEl = function (taskDataObj) {
   var taskInfoEl = document.createElement("div");
   taskInfoEl.className = "task-item";
 
-  // taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskNameInput + "</h3><span class='task-type'>" + taskTypeInput + "</span>";
   taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObj.name + "</h3><span   class='task-type'>" + taskDataObj.type +"</span>";
   listItemEl.appendChild(taskInfoEl);
 
@@ -136,27 +158,6 @@ var taskButtonHandler = function (event) {
   }
 };
 
-var taskStatusChangeHandler = function (event) {
-  // console.log(event.target, event.target.getAttribute("data-task-id"))
-  //get the task item's id
-  var taskId = event.target.getAttribute("data-task-id");
-
-  // get the currently selected option's value and convert to lowercase
-  var statusValue = event.target.value.toLowerCase();
-
-  // find the parenttask item element based on the id
-  var taskSelected = document.querySelector(
-    ".task-item[data-task-id='" + taskId + "']"
-  );
-
-  if (statusValue === "to do") {
-    tasksToDoEl.appendChild(taskSelected);
-  } else if (statusValue === "in progress") {
-    taskInProgressEl.appendChild(taskSelected);
-  } else if (statusValue === "completed") {
-    tasksCompletedEl.appendChild(taskSelected);
-  }
-};
 
 var editTask = function (taskId) {
   console.log("editing task #" + taskId);
@@ -195,4 +196,5 @@ formEl.addEventListener("submit", taskFormHandler);
 pageContentEl.addEventListener("click", taskButtonHandler);
 
 // for changing status
+console.log(taskStatusChangeHandler);
 pageContentEl.addEventListener("change", taskStatusChangeHandler);
